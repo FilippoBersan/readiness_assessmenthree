@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Individuale – Marco Bianchi</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gray-50: #f9f9f9;
+    --gray-100: #f0f0f0;
+    --gray-200: #e0e0e0;
+    --gray-400: #9e9e9e;
+    --gray-600: #555;
+    --gray-700: #444;
+    --gray-800: #222;
+    --bar-fill: #1a1a1a;
+    --bar-empty: #e5e5e5;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: #f4f4f4; color: var(--gray-800); font-size: 13px; line-height: 1.5; }
+  .page { width: 794px; margin: 0 auto 40px; padding: 52px 60px; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+
+  /* PAGE 1 */
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; }
+  .cover-image { width: 290px; height: 185px; background: linear-gradient(135deg, #d6ccdf 0%, #e8d8cb 55%, #f2cece 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+  .cover-image svg { opacity: 0.35; }
+  .date-block { text-align: right; font-size: 11px; color: var(--gray-600); line-height: 1.8; }
+  .date-block strong { display: block; font-weight: 600; color: var(--gray-800); font-size: 12px; }
+  .report-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 8px; }
+  .cover-name { font-family: 'DM Serif Display', serif; font-size: 50px; font-weight: 400; line-height: 1.05; color: var(--gray-800); margin-bottom: 6px; }
+  .cover-subtitle { font-size: 14px; color: var(--gray-600); margin-bottom: 40px; }
+  .assessment-box { border: 1px solid var(--gray-200); border-radius: 4px; padding: 20px 24px; margin-bottom: 32px; }
+  .ab-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .ab-title { font-weight: 700; font-size: 13px; }
+  .rb-label { font-size: 10px; color: var(--gray-600); text-align: right; margin-bottom: 2px; }
+  .ready-badge { font-family: 'DM Serif Display', serif; font-size: 34px; color: var(--gray-800); }
+  .ab-desc { font-size: 11.5px; color: var(--gray-600); line-height: 1.65; max-width: 340px; margin-bottom: 20px; }
+  .scores-row { display: flex; border-top: 1px solid var(--gray-200); padding-top: 16px; }
+  .sc { flex: 1; padding-right: 10px; }
+  .sc-num { font-family: 'DM Serif Display', serif; font-size: 34px; line-height: 1; color: var(--gray-800); }
+  .sc-unit { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-400); display: block; margin: 2px 0 2px; }
+  .sc-dim { font-size: 10px; color: var(--gray-600); font-weight: 500; }
+  .sc-dim b { font-weight: 700; color: var(--gray-800); }
+  .footer-note { font-size: 10px; color: var(--gray-400); font-style: italic; line-height: 1.55; border-top: 1px solid var(--gray-200); padding-top: 20px; margin-top: 40px; }
+
+  /* PAGE HEADER */
+  .ph { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 10px; border-bottom: 1px solid var(--gray-200); }
+  .ph-l { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); }
+  .ph-r { font-size: 9px; color: var(--gray-400); }
+
+  /* PAGE 2 */
+  .sec-title { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 12px; }
+  .sintesi-text { font-size: 12px; color: var(--gray-700); line-height: 1.7; margin-bottom: 32px; }
+
+  .band-table { border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; margin-bottom: 32px; }
+  .bt-head { display: flex; border-bottom: 1px solid var(--gray-200); }
+  .bth { flex: 1; padding: 9px 14px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-400); text-align: center; border-right: 1px solid var(--gray-200); }
+  .bth:last-child { border-right: none; }
+  .bth.act { background: var(--gray-800); color: #fff; }
+  .bt-row { display: flex; border-bottom: 1px solid var(--gray-100); }
+  .bt-row:last-child { border-bottom: none; }
+  .btc { flex: 1; padding: 9px 14px; font-size: 11px; border-right: 1px solid var(--gray-100); color: var(--gray-600); line-height: 1.5; }
+  .btc:last-child { border-right: none; }
+  .btc.lbl { font-weight: 700; color: var(--gray-800); font-size: 12px; }
+  .btc.sten { font-size: 10px; color: var(--gray-400); }
+  .btc.desc { flex: 2; }
+  .bt-row.highlight { background: var(--gray-50); }
+
+  /* STEN BAR ROW (page 2) */
+  .dr { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; }
+  .dl { width: 175px; flex-shrink: 0; font-size: 12px; color: var(--gray-800); }
+  .dl b { font-weight: 700; margin-right: 4px; }
+  .bar { display: flex; gap: 3px; flex: 1; align-items: center; }
+  .pip { width: 22px; height: 8px; border-radius: 2px; background: var(--bar-empty); }
+  .pip.f { background: var(--bar-fill); }
+  .n1 { font-size: 10px; color: var(--gray-400); width: 12px; flex-shrink: 0; }
+  .n10 { font-size: 10px; color: var(--gray-400); width: 20px; flex-shrink: 0; text-align: right; }
+  .sv { width: 20px; text-align: right; font-weight: 700; font-size: 13px; color: var(--gray-800); flex-shrink: 0; }
+  .sten-note { font-size: 10px; color: var(--gray-400); margin-top: 14px; line-height: 1.6; }
+
+  /* DIM PAGES */
+  .dim-lbl { font-size: 10px; color: var(--gray-400); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .dim-title { font-family: 'DM Serif Display', serif; font-size: 38px; font-weight: 400; color: var(--gray-800); margin-bottom: 2px; }
+  .dim-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
+  .dsr { display: flex; gap: 28px; align-items: flex-end; margin-bottom: 18px; }
+  .dsb .big { font-family: 'DM Serif Display', serif; font-size: 42px; font-weight: 400; color: var(--gray-800); line-height: 1; }
+  .dsb .unit { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); display: block; margin-top: 3px; }
+  .band-ind { display: flex; border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+  .bseg { flex: 1; padding: 7px 10px; font-size: 9.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-400); text-align: center; border-right: 1px solid var(--gray-200); }
+  .bseg:last-child { border-right: none; }
+  .bseg.act { background: var(--gray-800); color: #fff; }
+  .bar-lg { display: flex; gap: 4px; align-items: center; margin-bottom: 28px; }
+  .pip-lg { flex: 1; height: 10px; border-radius: 2px; background: var(--bar-empty); }
+  .pip-lg.f { background: var(--bar-fill); }
+  .int-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 8px; }
+  .int-txt { font-size: 12px; color: var(--gray-600); line-height: 1.7; margin-bottom: 28px; }
+  .sf-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 14px; }
+  .sfr { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .sfn { width: 185px; flex-shrink: 0; font-size: 12px; color: var(--gray-700); }
+  .sfb { display: flex; gap: 3px; flex: 1; }
+  .sfp { flex: 1; height: 7px; border-radius: 2px; background: var(--bar-empty); }
+  .sfp.f { background: var(--bar-fill); }
+  .sfv { width: 18px; text-align: right; font-weight: 700; font-size: 12px; color: var(--gray-800); flex-shrink: 0; }
+  .pf { margin-top: 22px; padding: 12px 16px; background: var(--gray-50); border-left: 3px solid var(--gray-800); font-size: 11.5px; color: var(--gray-700); line-height: 1.6; }
+  .pf b { font-weight: 700; color: var(--gray-800); }
+
+  /* PAGE 9 */
+  .rec-intro { font-size: 12px; color: var(--gray-600); line-height: 1.7; margin-bottom: 28px; }
+  .ri { display: flex; gap: 20px; margin-bottom: 0; padding: 20px 0; border-bottom: 1px solid var(--gray-100); }
+  .ri:last-of-type { border-bottom: none; }
+  .rnum { font-family: 'DM Serif Display', serif; font-size: 30px; color: var(--gray-200); line-height: 1; flex-shrink: 0; width: 38px; }
+  .rtitle { font-weight: 700; font-size: 13px; color: var(--gray-800); margin-bottom: 5px; }
+  .rtext { font-size: 12px; color: var(--gray-600); line-height: 1.7; }
+  .note-met { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--gray-200); font-size: 10px; color: var(--gray-400); font-style: italic; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+  <div class="cover-top">
+    <div class="cover-image">
+       <img src="image.png" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+        <circle cx="50" cy="35" r="22" fill="#999"/>
+        <path d="M20 78 Q50 58 80 78" stroke="#999" stroke-width="3" fill="none"/>
+        <circle cx="105" cy="28" r="14" fill="#bbb" stroke="#999" stroke-width="2"/>
+        <line x1="105" y1="14" x2="105" y2="5" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="105" y1="42" x2="105" y2="52" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="date-block">
+      Data di compilazione<strong>4 marzo 2026</strong>
+    </div>
+  </div>
+
+  <div class="report-label">Report Individuale</div>
+  <div class="cover-name">Marco Bianchi</div>
+  <div class="cover-subtitle">AI Manager · Acme S.r.l.</div>
+
+  <div class="assessment-box">
+    <div class="ab-header">
+      <div class="ab-title">Big Five + AI Readiness Assessment</div>
+      <div>
+        <div class="rb-label">Readiness Band</div>
+        <div class="ready-badge">READY</div>
+      </div>
+    </div>
+    <div class="ab-desc">Il presente report presenta il profilo psicometrico individuale elaborato sulla base delle risposte al questionario Big Five + AI Readiness. I risultati sono espressi nella scala STEN (1–10) e T-score (media 50, ds 10) in riferimento al campione normativo di professionisti italiani.</div>
+    <div class="scores-row">
+      <div class="sc"><div class="sc-num">8</div><span class="sc-unit">STEN</span><div class="sc-dim"><b>O</b> Apertura Mentale</div></div>
+      <div class="sc"><div class="sc-num">7</div><span class="sc-unit">STEN</span><div class="sc-dim"><b>C</b> Coscienziosità</div></div>
+      <div class="sc"><div class="sc-num">6</div><span class="sc-unit">STEN</span><div class="sc-dim"><b>E</b> Estroversione</div></div>
+      <div class="sc"><div class="sc-num">7</div><span class="sc-unit">STEN</span><div class="sc-dim"><b>A</b> Amicalità</div></div>
+      <div class="sc"><div class="sc-num">7</div><span class="sc-unit">STEN</span><div class="sc-dim"><b>N</b> Stabilità Emotiva</div></div>
+      <div class="sc"><div class="sc-num">8</div><span class="sc-unit">STEN</span><div class="sc-dim"><b>AI</b> AI Readiness</div></div>
+    </div>
+  </div>
+  <div class="footer-note">Documento riservato. I risultati sono destinati esclusivamente al destinatario indicato e non devono essere divulgati a terzi senza autorizzazione scritta.</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div>
+    <div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 2</div>
+  </div>
+  <div class="sec-title">Sintesi del Profilo</div>
+  <div class="sintesi-text">Marco Bianchi presenta un profilo complessivo di Readiness superiore alla media del campione normativo, con particolare evidenza nelle dimensioni di Apertura Mentale e AI Readiness. Il profilo suggerisce una predisposizione solida all'integrazione di strumenti AI nel contesto lavorativo, sostenuta da capacità organizzative e una buona stabilità emotiva. Di seguito il dettaglio per dimensione.</div>
+
+  <div class="sec-title">Readiness Band Complessiva</div>
+  <div class="band-table">
+    <div class="bt-head">
+      <div class="bth">Explorer</div>
+      <div class="bth">Emerging</div>
+      <div class="bth act">Ready</div>
+      <div class="bth">Leader</div>
+    </div>
+    <div class="bt-row">
+      <div class="btc lbl">Leader</div>
+      <div class="btc sten">STEN 8–10 · T ≥ 65</div>
+      <div class="btc desc">Profilo eccellente, punto di riferimento per il team</div>
+    </div>
+    <div class="bt-row highlight">
+      <div class="btc lbl" style="font-weight:800">Ready</div>
+      <div class="btc sten">STEN 6–7 · T 55–64</div>
+      <div class="btc desc">Profilo maturo, operativo nel ruolo target</div>
+    </div>
+    <div class="bt-row">
+      <div class="btc lbl">Emerging</div>
+      <div class="btc sten">STEN 4–5 · T 45–54</div>
+      <div class="btc desc">Competenze in costruzione, pronto per sfide progressive</div>
+    </div>
+    <div class="bt-row">
+      <div class="btc lbl">Explorer</div>
+      <div class="btc sten">STEN 1–3 · T &lt; 45</div>
+      <div class="btc desc">Profilo in sviluppo, alta potenziale di crescita</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Punteggi per Dimensione — Scala STEN (1–10)</div>
+
+  <div class="dr"><div class="dl"><b>O</b> Apertura Mentale</div><div class="bar"><span class="n1">1</span><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip"></div><div class="pip"></div><span class="n10">10</span></div><div class="sv">8</div></div>
+  <div class="dr"><div class="dl"><b>C</b> Coscienziosità</div><div class="bar"><span class="n1">1</span><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="n10">10</span></div><div class="sv">7</div></div>
+  <div class="dr"><div class="dl"><b>E</b> Estroversione</div><div class="bar"><span class="n1">1</span><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="n10">10</span></div><div class="sv">6</div></div>
+  <div class="dr"><div class="dl"><b>A</b> Amicalità</div><div class="bar"><span class="n1">1</span><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="n10">10</span></div><div class="sv">7</div></div>
+  <div class="dr"><div class="dl"><b>N</b> Stabilità Emotiva</div><div class="bar"><span class="n1">1</span><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="n10">10</span></div><div class="sv">7</div></div>
+  <div class="dr"><div class="dl"><b>AI</b> AI Readiness</div><div class="bar"><span class="n1">1</span><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip f"></div><div class="pip"></div><div class="pip"></div><span class="n10">10</span></div><div class="sv">8</div></div>
+
+  <div class="sten-note">I punteggi STEN sono calcolati rispetto al campione normativo. STEN 1–3 = Explorer · 4–5 = Emerging · 6–7 = Ready · 8–10 = Leader. La media del campione si colloca in STEN 5–6.</div>
+</div>
+
+<!-- PAGE 3 – Apertura Mentale -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 3</div></div>
+  <div class="dim-lbl">Dimensione 1 di 6</div>
+  <div class="dim-title">Apertura Mentale</div>
+  <div class="dim-sub">Openness</div>
+  <div class="dsr">
+    <div class="dsb"><div class="big">8</div><span class="unit">STEN</span></div>
+    <div class="dsb"><div class="big">62</div><span class="unit">T-SCORE</span></div>
+    <div class="dsb"><div class="big">79°</div><span class="unit">PERCENTILE</span></div>
+  </div>
+  <div class="band-ind"><div class="bseg">Explorer</div><div class="bseg">Emerging</div><div class="bseg">Ready</div><div class="bseg act">Leader</div></div>
+  <div class="bar-lg"><span style="font-size:10px;color:var(--gray-400);width:12px;flex-shrink:0">1</span><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg"></div><div class="pip-lg"></div><span style="font-size:10px;color:var(--gray-400);width:20px;flex-shrink:0;text-align:right">10</span></div>
+  <div class="int-lbl">Interpretazione</div>
+  <div class="int-txt">Marco dimostra una spiccata curiosità intellettuale e una forte propensione all'esplorazione di nuove idee, metodi e tecnologie. È propenso ad abbracciare il cambiamento e a ricercare approcci innovativi nei contesti lavorativi, caratteristica particolarmente rilevante in ambienti ad alta intensità di AI.</div>
+  <div class="sf-lbl">Sfaccettature</div>
+  <div class="sfr"><div class="sfn">Curiosità intellettuale</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="sfr"><div class="sfn">Tolleranza dell'ambiguità</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="sfr"><div class="sfn">Creatività applicata</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="sfr"><div class="sfn">Apertura al cambiamento</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">9</div></div>
+  <div class="pf"><b>Punto di forza:</b> Apertura Mentale è una dimensione di eccellenza per Marco, posizionandola nel 79° percentile del campione normativo.</div>
+</div>
+
+<!-- PAGE 4 – Coscienziosità -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 4</div></div>
+  <div class="dim-lbl">Dimensione 2 di 6</div>
+  <div class="dim-title">Coscienziosità</div>
+  <div class="dim-sub">Conscientiousness</div>
+  <div class="dsr">
+    <div class="dsb"><div class="big">7</div><span class="unit">STEN</span></div>
+    <div class="dsb"><div class="big">58</div><span class="unit">T-SCORE</span></div>
+    <div class="dsb"><div class="big">71°</div><span class="unit">PERCENTILE</span></div>
+  </div>
+  <div class="band-ind"><div class="bseg">Explorer</div><div class="bseg">Emerging</div><div class="bseg act">Ready</div><div class="bseg">Leader</div></div>
+  <div class="bar-lg"><span style="font-size:10px;color:var(--gray-400);width:12px;flex-shrink:0">1</span><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg"></div><div class="pip-lg"></div><div class="pip-lg"></div><span style="font-size:10px;color:var(--gray-400);width:20px;flex-shrink:0;text-align:right">10</span></div>
+  <div class="int-lbl">Interpretazione</div>
+  <div class="int-txt">Marco mostra un livello di organizzazione e affidabilità superiore alla media. Tende a pianificare le attività con anticipo e a mantenere gli impegni presi. In contesti di adozione tecnologica, questa caratteristica si traduce in un approccio metodico all'apprendimento e all'implementazione di nuovi strumenti.</div>
+  <div class="sf-lbl">Sfaccettature</div>
+  <div class="sfr"><div class="sfn">Organizzazione</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="sfr"><div class="sfn">Orientamento all'obiettivo</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="sfr"><div class="sfn">Autodisciplina</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">6</div></div>
+  <div class="sfr"><div class="sfn">Affidabilità</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="pf"><b>Punto di forza:</b> Coscienziosità è una dimensione di eccellenza per Marco, posizionandola nel 71° percentile del campione normativo.</div>
+</div>
+
+<!-- PAGE 5 – Estroversione -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 5</div></div>
+  <div class="dim-lbl">Dimensione 3 di 6</div>
+  <div class="dim-title">Estroversione</div>
+  <div class="dim-sub">Extraversion</div>
+  <div class="dsr">
+    <div class="dsb"><div class="big">6</div><span class="unit">STEN</span></div>
+    <div class="dsb"><div class="big">54</div><span class="unit">T-SCORE</span></div>
+    <div class="dsb"><div class="big">61°</div><span class="unit">PERCENTILE</span></div>
+  </div>
+  <div class="band-ind"><div class="bseg">Explorer</div><div class="bseg">Emerging</div><div class="bseg act">Ready</div><div class="bseg">Leader</div></div>
+  <div class="bar-lg"><span style="font-size:10px;color:var(--gray-400);width:12px;flex-shrink:0">1</span><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg"></div><div class="pip-lg"></div><div class="pip-lg"></div><div class="pip-lg"></div><span style="font-size:10px;color:var(--gray-400);width:20px;flex-shrink:0;text-align:right">10</span></div>
+  <div class="int-lbl">Interpretazione</div>
+  <div class="int-txt">Marco presenta un profilo bilanciato sul piano dell'energia relazionale. È in grado di comunicare efficacemente in team e di promuovere iniziative innovative, pur mantenendo spazi di riflessione individuale. Questo equilibrio favorisce sia la collaborazione che il lavoro autonomo con strumenti AI.</div>
+  <div class="sf-lbl">Sfaccettature</div>
+  <div class="sfr"><div class="sfn">Assertività</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">6</div></div>
+  <div class="sfr"><div class="sfn">Socievolezza</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">5</div></div>
+  <div class="sfr"><div class="sfn">Energia relazionale</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="sfr"><div class="sfn">Leadership informale</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">6</div></div>
+  <div class="pf"><b>Punto di forza:</b> Estroversione è una dimensione di eccellenza per Marco, posizionandola nel 61° percentile del campione normativo.</div>
+</div>
+
+<!-- PAGE 6 – Amicalità -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 6</div></div>
+  <div class="dim-lbl">Dimensione 4 di 6</div>
+  <div class="dim-title">Amicalità</div>
+  <div class="dim-sub">Agreeableness</div>
+  <div class="dsr">
+    <div class="dsb"><div class="big">7</div><span class="unit">STEN</span></div>
+    <div class="dsb"><div class="big">57</div><span class="unit">T-SCORE</span></div>
+    <div class="dsb"><div class="big">68°</div><span class="unit">PERCENTILE</span></div>
+  </div>
+  <div class="band-ind"><div class="bseg">Explorer</div><div class="bseg">Emerging</div><div class="bseg act">Ready</div><div class="bseg">Leader</div></div>
+  <div class="bar-lg"><span style="font-size:10px;color:var(--gray-400);width:12px;flex-shrink:0">1</span><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg"></div><div class="pip-lg"></div><div class="pip-lg"></div><span style="font-size:10px;color:var(--gray-400);width:20px;flex-shrink:0;text-align:right">10</span></div>
+  <div class="int-lbl">Interpretazione</div>
+  <div class="int-txt">Il profilo di Marco evidenzia una buona propensione alla cooperazione e all'ascolto attivo. Sa costruire relazioni di fiducia e gestire la dinamica di gruppo in modo costruttivo, aspetti che favoriscono la diffusione di nuove pratiche AI all'interno dei team.</div>
+  <div class="sf-lbl">Sfaccettature</div>
+  <div class="sfr"><div class="sfn">Cooperazione</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="sfr"><div class="sfn">Empatia</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="sfr"><div class="sfn">Gestione dei conflitti</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">6</div></div>
+  <div class="sfr"><div class="sfn">Orientamento al team</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="pf"><b>Punto di forza:</b> Amicalità è una dimensione di eccellenza per Marco, posizionandola nel 68° percentile del campione normativo.</div>
+</div>
+
+<!-- PAGE 7 – Stabilità Emotiva -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 7</div></div>
+  <div class="dim-lbl">Dimensione 5 di 6</div>
+  <div class="dim-title">Stabilità Emotiva</div>
+  <div class="dim-sub">Emotional Stability</div>
+  <div class="dsr">
+    <div class="dsb"><div class="big">7</div><span class="unit">STEN</span></div>
+    <div class="dsb"><div class="big">56</div><span class="unit">T-SCORE</span></div>
+    <div class="dsb"><div class="big">65°</div><span class="unit">PERCENTILE</span></div>
+  </div>
+  <div class="band-ind"><div class="bseg">Explorer</div><div class="bseg">Emerging</div><div class="bseg act">Ready</div><div class="bseg">Leader</div></div>
+  <div class="bar-lg"><span style="font-size:10px;color:var(--gray-400);width:12px;flex-shrink:0">1</span><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg"></div><div class="pip-lg"></div><div class="pip-lg"></div><span style="font-size:10px;color:var(--gray-400);width:20px;flex-shrink:0;text-align:right">10</span></div>
+  <div class="int-lbl">Interpretazione</div>
+  <div class="int-txt">Marco mostra una solida stabilità emotiva sotto pressione. Reagisce in modo costruttivo agli imprevisti e ai risultati inattesi, caratteristica essenziale nell'adozione di tecnologie emergenti dove l'incertezza è strutturale e la tolleranza agli errori diventa una competenza critica.</div>
+  <div class="sf-lbl">Sfaccettature</div>
+  <div class="sfr"><div class="sfn">Resilienza allo stress</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="sfr"><div class="sfn">Tolleranza all'incertezza</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="sfr"><div class="sfn">Controllo emotivo</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">6</div></div>
+  <div class="sfr"><div class="sfn">Recupero post-errore</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="pf"><b>Punto di forza:</b> Stabilità Emotiva è una dimensione di eccellenza per Marco, posizionandola nel 65° percentile del campione normativo.</div>
+</div>
+
+<!-- PAGE 8 – AI Readiness -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 8</div></div>
+  <div class="dim-lbl">Dimensione 6 di 6</div>
+  <div class="dim-title">AI Readiness</div>
+  <div class="dim-sub">AI Readiness Index</div>
+  <div class="dsr">
+    <div class="dsb"><div class="big">8</div><span class="unit">STEN</span></div>
+    <div class="dsb"><div class="big">63</div><span class="unit">T-SCORE</span></div>
+    <div class="dsb"><div class="big">77°</div><span class="unit">PERCENTILE</span></div>
+  </div>
+  <div class="band-ind"><div class="bseg">Explorer</div><div class="bseg">Emerging</div><div class="bseg">Ready</div><div class="bseg act">Leader</div></div>
+  <div class="bar-lg"><span style="font-size:10px;color:var(--gray-400);width:12px;flex-shrink:0">1</span><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg f"></div><div class="pip-lg"></div><div class="pip-lg"></div><span style="font-size:10px;color:var(--gray-400);width:20px;flex-shrink:0;text-align:right">10</span></div>
+  <div class="int-lbl">Interpretazione</div>
+  <div class="int-txt">Marco presenta un profilo di AI Readiness superiore alla media del campione normativo. Combina una forte apertura all'innovazione con competenze pratiche di integrazione degli strumenti AI nel lavoro quotidiano. Il suo profilo indica una predisposizione a diventare un riferimento interno per l'adozione responsabile dell'AI.</div>
+  <div class="sf-lbl">Sfaccettature</div>
+  <div class="sfr"><div class="sfn">Familiarità con strumenti AI</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="sfr"><div class="sfn">Apprendimento autonomo</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">9</div></div>
+  <div class="sfr"><div class="sfn">Pensiero critico sull'AI</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">7</div></div>
+  <div class="sfr"><div class="sfn">Adattamento workflow</div><div class="sfb"><span style="font-size:10px;color:var(--gray-400);width:10px;flex-shrink:0">1</span><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp f"></div><div class="sfp"></div><div class="sfp"></div><span style="font-size:10px;color:var(--gray-400);width:16px;flex-shrink:0;text-align:right">10</span></div><div class="sfv">8</div></div>
+  <div class="pf"><b>Punto di forza:</b> AI Readiness è una dimensione di eccellenza per Marco, posizionandola nel 77° percentile del campione normativo.</div>
+</div>
+
+<!-- PAGE 9 – Raccomandazioni -->
+<div class="page">
+  <div class="ph"><div class="ph-l">Readiness Assessment · Report Individuale &nbsp;·&nbsp; Marco Bianchi · Acme S.r.l.</div><div class="ph-r">Riservato · 4 marzo 2026 · Readiness Assessment Platform &nbsp;&nbsp; Pag. 9</div></div>
+  <div class="sec-title">Raccomandazioni e Sviluppo</div>
+  <div class="rec-intro">Sulla base del profilo complessivo, si suggeriscono i seguenti percorsi di sviluppo per massimizzare il potenziale di AI Readiness.</div>
+  <div class="ri"><div class="rnum">01</div><div><div class="rtitle">Consolidamento AI Readiness</div><div class="rtext">Proseguire con programmi di upskilling su strumenti AI generativi e analitici. Il profilo di Apertura Mentale (STEN 8) garantisce un apprendimento rapido e sostenuto.</div></div></div>
+  <div class="ri"><div class="rnum">02</div><div><div class="rtitle">Leadership di cambiamento</div><div class="rtext">Il profilo combinato di Apertura (8) e Coscienziosità (7) suggerisce un potenziale per ruoli di AI Champion interno, con responsabilità di diffusione delle best practice nel team.</div></div></div>
+  <div class="ri"><div class="rnum">03</div><div><div class="rtitle">Sviluppo relazionale</div><div class="rtext">Lavorare sulla dimensione di Estroversione (STEN 6) attraverso esperienze di facilitazione e presentazione pubblica di progetti AI potrebbe amplificare l'impatto del profilo.</div></div></div>
+  <div class="ri"><div class="rnum">04</div><div><div class="rtitle">Gestione dell'incertezza</div><div class="rtext">La buona Stabilità Emotiva (STEN 7) è un asset in contesti di trasformazione digitale. Consolidare tecniche di decision-making in condizioni di incertezza strutturale.</div></div></div>
+  <div class="note-met">Note metodologiche: Il presente report è generato automaticamente sulla base delle risposte al questionario e dei parametri normativi provvisori (Fase pilota, Mar 2026). I punteggi STEN e le Readiness Band saranno ricalibrati al termine della raccolta del campione normativo definitivo (Fase 3). Questo strumento è a supporto delle decisioni e non le sostituisce. Non deve essere l'unico criterio di valutazione in processi selettivi.</div>
+</div>
+
+</body>
+</html>
