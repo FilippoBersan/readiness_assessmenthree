@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Readiness Assessment — Piattaforma</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     TOPBAR ADMIN
+══════════════════════════════════════════════════════ -->
+<div class="topbar" id="main-topbar" style="display:none">
+  <span class="topbar-logo" onclick="goToDashboard()" title="Dashboard">Readiness Assessment</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-section" id="topbar-section-label">Dashboard</span>
+  <div class="topbar-right">
+    <div style="text-align:right">
+      <div class="topbar-user" id="topbar-nick">—</div>
+      <div class="topbar-role" id="topbar-role">—</div>
+    </div>
+    <button class="topbar-logout" onclick="doLogout()">Esci</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TOPBAR TEST TAKER
+══════════════════════════════════════════════════════ -->
+<div class="topbar" id="taker-topbar" style="display:none">
+  <span class="topbar-logo">Readiness Assessment</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-section" id="topbar-company-tt">Acme S.r.l.</span>
+  <div class="topbar-progress" id="topbar-progress-tt" style="display:none">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <span class="progress-label" id="progress-label">0 / 10</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: LOGIN
+══════════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-login">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:var(--white)">
+<div>
+      <img src="image.png" width="200" height="160">
+</div>
+    <div class="login-wrap fade-in">
+      <div class="login-logo">Readiness Assessment · Accesso amministrativo</div>
+      <div class="login-card">
+        <h1 class="login-title">Accedi</h1>
+        <p class="login-sub">Inserisci le tue credenziali per accedere al pannello.</p>
+        <div class="login-error" id="login-error">Nickname o password non corretti. Riprova.</div>
+        <div class="field-group">
+          <label class="field-label">Nickname</label>
+          <input class="field-input" id="login-nick" type="text" placeholder="es. admin"
+            autocomplete="username" oninput="checkLoginForm()" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <div class="pwd-wrap">
+            <input class="field-input" id="login-pwd" type="password" placeholder="••••••••"
+              oninput="checkLoginForm()" onkeydown="if(event.key==='Enter')doLogin()">
+            <span class="pwd-toggle" onclick="togglePwd('login-pwd',this)">Mostra</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btn-login" onclick="doLogin()" disabled style="margin-top:8px">Accedi</button>
+      </div>
+      <p class="login-footer">Accesso riservato agli amministratori · v1.0</p>
+      <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--light)">
+        Sei un partecipante al test?
+        <span onclick="goToTakerView()" style="color:var(--black);font-weight:500;cursor:pointer;text-decoration:underline">Accedi al questionario →</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: DASHBOARD
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-dashboard" style="background:var(--bg);padding-top:48px">
+  <div class="layout">
+
+    <aside>
+      <div class="aside-section">
+        <div class="aside-label">Navigazione</div>
+        <div class="aside-item active" onclick="goToDashboard()"><span class="aside-icon">⊞</span> Dashboard</div>
+        <div class="aside-item" onclick="goToUsers()"><span class="aside-icon">👤</span> Utenti</div>
+        <div class="aside-item" onclick="goToConfig()"><span class="aside-icon">⚙</span> Configurazioni</div>
+        <div class="aside-item" onclick="goToSession()"><span class="aside-icon">📋</span> Nuova sessione</div>
+      </div>
+      <div class="aside-section">
+        <div class="aside-label">Anteprima</div>
+        <div class="aside-item" onclick="goToVistaAziendale()"><span class="aside-icon">📊</span> Vista Aziendale</div>
+        <div class="aside-item" onclick="goToTakerView()"><span class="aside-icon">▶</span> Vista test taker</div>
+      </div>
+    </aside>
+
+    <main class="fade-in">
+      <h1 class="page-title">Benvenuto, <span id="dash-name">—</span></h1>
+      <p class="page-desc">Panoramica della piattaforma Readiness Assessment.</p>
+      <div class="stats-strip">
+        <div class="stat-cell"><div class="stat-num">8</div><div class="stat-label">Test Taker</div></div>
+        <div class="stat-cell"><div class="stat-num">4</div><div class="stat-label">Completati</div></div>
+        <div class="stat-cell"><div class="stat-num">3</div><div class="stat-label">Aziende</div></div>
+        <div class="stat-cell"><div class="stat-num">2</div><div class="stat-label">Report inviati</div></div>
+      </div>
+      <div class="dash-cards">
+        <div class="dash-card" onclick="goToUsers()">
+          <div class="dash-card-icon">👤</div>
+          <div class="dash-card-title">Gestione utenti</div>
+          <div class="dash-card-desc">Crea e gestisci gli account amministrativi e i livelli di accesso.</div>
+          <span class="dash-card-arrow">›</span>
+        </div>
+        <div class="dash-card" onclick="goToConfig()">
+          <div class="dash-card-icon">⚙</div>
+          <div class="dash-card-title">Configurazioni</div>
+          <div class="dash-card-desc">Email di invito, invio test e distribuzione report PDF.</div>
+          <span class="dash-card-arrow">›</span>
+        </div>
+        <div class="dash-card" onclick="goToSession()">
+          <div class="dash-card-icon">📋</div>
+          <div class="dash-card-title">Nuova sessione</div>
+          <div class="dash-card-desc">Avvia un nuovo ciclo di assessment per un'azienda.</div>
+          <span class="dash-card-arrow">›</span>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: GESTIONE UTENTI
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-users" style="background:var(--bg);padding-top:48px">
+  <div class="layout">
+
+    <aside>
+      <div class="aside-section">
+        <div class="aside-label">Navigazione</div>
+        <div class="aside-item" onclick="goToDashboard()"><span class="aside-icon">⊞</span> Dashboard</div>
+        <div class="aside-item active"><span class="aside-icon">👤</span> Utenti</div>
+        <div class="aside-item" onclick="goToConfig()"><span class="aside-icon">⚙</span> Configurazioni</div>
+        <div class="aside-item" onclick="goToSession()"><span class="aside-icon">📋</span> Nuova sessione</div>
+      </div>
+      <div class="aside-section">
+        <div class="aside-label">Anteprima</div>
+        <div class="aside-item" onclick="goToVistaAziendale()"><span class="aside-icon">📊</span> Vista Aziendale</div>
+        <div class="aside-item" onclick="goToTakerView()"><span class="aside-icon">▶</span> Vista test taker</div>
+      </div>
+    </aside>
+
+    <main class="fade-in">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+        <div>
+          <h1 class="page-title">Utenti</h1>
+          <p class="page-desc">Gestisci gli account amministrativi e i livelli di accesso alla piattaforma.</p>
+        </div>
+        <button class="btn btn-primary btn-sm btn-inline" style="margin-top:6px" onclick="openModal()">+ Nuovo utente</button>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" placeholder="Cerca per nome o nickname…" oninput="filterUsers(this.value)">
+          <select class="search-input" id="filter-role" onchange="filterUsers('')" style="width:160px">
+            <option value="">Tutti i ruoli</option>
+            <option>Super Admin</option>
+            <option>Amministratore</option>
+            <option>Operatore</option>
+            <option>Viewer</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Utente</th><th>Nickname</th><th>Ruolo</th>
+              <th>Stato</th><th>Ultimo accesso</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+
+      <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--light);margin-bottom:14px">Livelli di accesso</div>
+      <div class="role-legend">
+        <div class="role-legend-row"><span class="role-pill role-superadmin">Super Admin</span><span class="role-legend-desc">Accesso completo: gestione utenti, configurazioni, dati, report, impostazioni sistema.</span></div>
+        <div class="role-legend-row"><span class="role-pill role-admin">Amministratore</span><span class="role-legend-desc">Gestione sessioni, invio test e report, accesso ai risultati di tutte le aziende.</span></div>
+        <div class="role-legend-row"><span class="role-pill role-viewer">Operatore</span><span class="role-legend-desc">Può inviare inviti e report solo per le aziende assegnate.</span></div>
+        <div class="role-legend-row"><span class="role-pill role-readonly">Viewer</span><span class="role-legend-desc">Sola lettura: visualizza risultati e report senza poter inviare inviti.</span></div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- Modal Utente -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h2 class="modal-title" id="modal-title">Nuovo utente</h2>
+    <p class="modal-sub" id="modal-sub">Compila i campi per creare un nuovo account amministrativo.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="field-group"><label class="field-label">Nome</label><input class="field-input" id="m-nome" type="text" placeholder="Es. Marco"></div>
+      <div class="field-group"><label class="field-label">Cognome</label><input class="field-input" id="m-cognome" type="text" placeholder="Es. Bianchi"></div>
+    </div>
+    <div class="field-group"><label class="field-label">Nickname</label><input class="field-input" id="m-nick" type="text" placeholder="Es. m.bianchi"></div>
+    <div class="field-group"><label class="field-label">Email</label><input class="field-input" id="m-email" type="email" placeholder="m.bianchi@azienda.it"></div>
+    <div class="field-group">
+      <label class="field-label">Password</label>
+      <div class="pwd-wrap">
+        <input class="field-input" id="m-pwd" type="password" placeholder="Minimo 8 caratteri">
+        <span class="pwd-toggle" onclick="togglePwd('m-pwd',this)">Mostra</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="field-group"><label class="field-label">Ruolo</label>
+        <select class="field-select" id="m-role">
+          <option>Amministratore</option><option>Operatore</option><option>Viewer</option><option>Super Admin</option>
+        </select>
+      </div>
+      <div class="field-group"><label class="field-label">Stato</label>
+        <select class="field-select" id="m-status">
+          <option value="active">Attivo</option><option value="inactive">Inattivo</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Annulla</button>
+      <button class="btn btn-danger btn-sm" id="btn-delete-user" onclick="deleteUser()" style="display:none">Elimina</button>
+      <button class="btn btn-primary btn-sm btn-inline" onclick="saveUser()">Salva</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: CONFIGURAZIONI
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-config" style="background:var(--white);padding-top:48px">
+  <div class="layout">
+
+    <aside>
+      <div class="aside-section">
+        <div class="aside-label">Navigazione</div>
+        <div class="aside-item" onclick="goToDashboard()"><span class="aside-icon">⊞</span> Dashboard</div>
+        <div class="aside-item" onclick="goToUsers()"><span class="aside-icon">👤</span> Utenti</div>
+        <div class="aside-item active"><span class="aside-icon">⚙</span> Configurazioni</div>
+        <div class="aside-item" onclick="goToSession()"><span class="aside-icon">📋</span> Nuova sessione</div>
+      </div>
+      <div class="aside-section">
+        <div class="aside-label">Anteprima</div>
+        <div class="aside-item" onclick="goToVistaAziendale()"><span class="aside-icon">📊</span> Vista Aziendale</div>
+        <div class="aside-item" onclick="goToTakerView()"><span class="aside-icon">▶</span> Vista test taker</div>
+      </div>
+    </aside>
+
+    <main>
+      <!-- Menu -->
+      <div id="config-menu" class="fade-in">
+        <div class="page-tag">Amministrazione</div>
+        <h1 class="page-title">Configurazioni</h1>
+        <p class="page-desc">Gestisci le impostazioni delle sessioni di assessment.</p>
+        <div class="config-list">
+          <div class="config-card" onclick="showConfigSub('email')">
+            <div class="config-card-icon">✉</div>
+            <div class="config-card-body">
+              <div class="config-card-title">Testo email di invito</div>
+              <div class="config-card-desc">Personalizza il messaggio inviato ai Test Taker</div>
+            </div>
+            <span class="config-card-arrow">›</span>
+          </div>
+          <div class="config-card" onclick="showConfigSub('inviti')">
+            <div class="config-card-icon">↗</div>
+            <div class="config-card-body">
+              <div class="config-card-title">Invio inviti</div>
+              <div class="config-card-desc">Seleziona gruppi di Test Taker e invia i link</div>
+            </div>
+            <span class="config-card-arrow">›</span>
+          </div>
+          <div class="config-card" onclick="showConfigSub('report')">
+            <div class="config-card-icon">↓</div>
+            <div class="config-card-body">
+              <div class="config-card-title">Invio report</div>
+              <div class="config-card-desc">Invia il report PDF ai partecipanti che hanno completato il test</div>
+            </div>
+            <span class="config-card-arrow">›</span>
+          </div>
+          <div class="config-card" onclick="showConfigSub('incontri')">
+            <div class="config-card-icon">📅</div>
+            <div class="config-card-body">
+              <div class="config-card-title">Pianifica incontri di restituzione</div>
+              <div class="config-card-desc">Schedula i colloqui individuali per la restituzione del report e invia gli inviti</div>
+            </div>
+            <span class="config-card-arrow">›</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub: Email -->
+      <div id="config-email" style="display:none" class="fade-in">
+        <div style="margin-bottom:20px">
+          <span onclick="showConfigSub('menu')" style="font-size:12px;color:var(--light);cursor:pointer"
+            onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--light)'">← Configurazioni</span>
+        </div>
+        <div class="page-tag">Configurazioni</div>
+        <h1 class="page-title">Testo email di invito</h1>
+        <p class="page-desc">Scrivi il messaggio che i Test Taker riceveranno via email.</p>
+        <div class="section-heading">Oggetto email</div>
+        <div class="field-group">
+          <input class="field-input" id="email-subject" type="text" value="Il tuo Readiness Assessment è pronto — {{azienda}}">
+          <div class="field-hint">{{azienda}} viene sostituito automaticamente.</div>
+        </div>
+        <hr class="divider">
+        <div class="section-heading">Corpo del messaggio</div>
+        <div class="field-group">
+          <label class="field-label">Testo</label>
+          <textarea class="field-input field-textarea" id="email-body" oninput="updateEmailPreview()" rows="10">Gentile {{nome}},
+
+ti invitiamo a completare il Readiness Assessment organizzato da {{azienda}}.
+
+Il test richiede circa 20–25 minuti e ti permetterà di ricevere un profilo personalizzato delle tue competenze rispetto all'adozione di strumenti AI nel lavoro.
+
+Clicca il pulsante qui sotto per accedere:
+
+→ {{link}}
+
+Data limite di compilazione: {{data_limite}}
+
+Non ci sono risposte giuste o sbagliate: rispondi in modo spontaneo e autentico.
+
+Cordiali saluti,
+Il team di {{azienda}}</textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Segnaposto disponibili</label>
+          <div class="tokens">
+            <span class="token" onclick="insertToken('{{nome}}')">{{nome}}</span>
+            <span class="token" onclick="insertToken('{{cognome}}')">{{cognome}}</span>
+            <span class="token" onclick="insertToken('{{azienda}}')">{{azienda}}</span>
+            <span class="token" onclick="insertToken('{{link}}')">{{link}}</span>
+            <span class="token" onclick="insertToken('{{data_limite}}')">{{data_limite}}</span>
+            <span class="token" onclick="insertToken('{{ruolo}}')">{{ruolo}}</span>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="section-heading">Anteprima</div>
+        <div class="email-preview" style="margin-bottom:32px">
+          <div class="preview-bar">
+            <span>Anteprima — dati di esempio</span>
+            <span style="font-weight:300;text-transform:none;letter-spacing:0">A: Marco Bianchi &lt;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90fdbef2f9f1fef3f8f9d0f1f3fdf5bef9e4">[email&#160;protected]</a>&gt;</span>
+          </div>
+          <div class="preview-body" id="email-preview-body"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-inline" onclick="showToast('Configurazione email salvata'); showConfigSub('menu')">Salva configurazione</button>
+          <button class="btn btn-secondary btn-inline" onclick="showConfigSub('menu')">Annulla</button>
+        </div>
+      </div>
+
+      <!-- Sub: Inviti -->
+      <div id="config-inviti" style="display:none" class="fade-in">
+        <div style="margin-bottom:20px">
+          <span onclick="showConfigSub('menu')" style="font-size:12px;color:var(--light);cursor:pointer"
+            onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--light)'">← Configurazioni</span>
+        </div>
+        <div class="page-tag">Configurazioni</div>
+        <h1 class="page-title">Invio inviti</h1>
+        <p class="page-desc">Seleziona i Test Taker a cui inviare il link di accesso al test.</p>
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <select class="field-select" id="filter-az-inv" onchange="filterTableInv()" style="max-width:200px;font-size:13px">
+            <option value="">Tutte le aziende</option>
+            <option>Acme S.r.l.</option><option>Beta Group S.p.A.</option><option>Gamma Consulting</option>
+          </select>
+          <select class="field-select" id="filter-stato-inv" onchange="filterTableInv()" style="max-width:180px;font-size:13px">
+            <option value="">Tutti gli stati</option>
+            <option value="non-inviato">Non inviato</option><option value="inviato">Già inviato</option>
+          </select>
+          <input class="search-input" id="search-inv" placeholder="Cerca per nome…" oninput="filterTableInv()">
+        </div>
+        <div class="table-wrap">
+          <div class="select-all-row" onclick="toggleAllInv()">
+            <div class="cb-wrap" id="cb-all-inv"></div>
+            <span id="sel-all-inv-label">Seleziona tutti</span>
+          </div>
+          <table>
+            <thead><tr><th style="width:36px"></th><th>Partecipante</th><th>Azienda</th><th>Ruolo</th><th>Stato</th><th>Data invio</th></tr></thead>
+            <tbody id="inv-tbody"></tbody>
+          </table>
+          <div class="summary-strip">
+            <span>Selezionati: <strong id="inv-count">0</strong></span>
+            <span id="inv-none" style="color:var(--light);font-size:12px">Nessun partecipante selezionato</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-inline" id="btn-send-inv" onclick="sendInviti()" disabled>Invia inviti selezionati</button>
+          <button class="btn btn-secondary btn-inline" onclick="showConfigSub('menu')">Annulla</button>
+          <span id="inv-sent-note" style="margin-left:auto;font-size:12px;color:var(--light);display:none">✓ Inviti inviati</span>
+        </div>
+      </div>
+
+      <!-- Sub: Incontri -->
+      <div id="config-incontri" style="display:none" class="fade-in">
+        <div style="margin-bottom:20px">
+          <span onclick="showConfigSub('menu')" style="font-size:12px;color:var(--light);cursor:pointer"
+            onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--light)'">← Configurazioni</span>
+        </div>
+        <div class="page-tag">Configurazioni</div>
+        <h1 class="page-title">Pianifica incontri di restituzione</h1>
+        <p class="page-desc">Organizza i colloqui individuali per la restituzione del report con i partecipanti che hanno completato il test.</p>
+
+        <div class="incontri-layout">
+          <!-- Colonna sinistra: calendario + slot -->
+          <div class="incontri-col-left">
+            <div class="section-heading" style="margin-bottom:10px">Seleziona data</div>
+            <div class="cal-wrap">
+              <div class="cal-header">
+                <button class="cal-nav-btn" onclick="calPrev()">&#8249;</button>
+                <span class="cal-month-label" id="cal-month-label"></span>
+                <button class="cal-nav-btn" onclick="calNext()">&#8250;</button>
+              </div>
+              <div class="cal-weekdays">
+                <span>Lun</span><span>Mar</span><span>Mer</span><span>Gio</span><span>Ven</span><span>Sab</span><span>Dom</span>
+              </div>
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+            <div id="cal-slots-wrap" style="display:none">
+              <div class="section-heading" style="margin-top:20px;margin-bottom:10px">Orari disponibili &mdash; <span id="cal-slot-date-label" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--mid)"></span></div>
+              <div class="time-slots" id="time-slots"></div>
+            </div>
+          </div>
+
+          <!-- Colonna destra: partecipante -->
+          <div class="incontri-col-right">
+            <div class="section-heading" style="margin-bottom:10px">Partecipante</div>
+            <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+              <select class="field-select" id="inc-filter-az" onchange="filterIncontriTakers()" style="font-size:13px;flex:1;min-width:130px">
+                <option value="">Tutte le aziende</option>
+                <option>Acme S.r.l.</option><option>Beta Group S.p.A.</option><option>Gamma Consulting</option>
+              </select>
+              <input class="search-input" id="inc-search" placeholder="Cerca per nome..." oninput="filterIncontriTakers()" style="flex:1;min-width:130px">
+            </div>
+            <div class="inc-taker-list" id="inc-taker-list"></div>
+
+            <div class="booking-summary" id="booking-summary" style="display:none">
+              <div class="booking-summary-title">&#128203; Riepilogo incontro</div>
+              <div class="booking-row"><span class="booking-key">Partecipante</span><span class="booking-val" id="bs-nome">&#8212;</span></div>
+              <div class="booking-row"><span class="booking-key">Data</span><span class="booking-val" id="bs-data">&#8212;</span></div>
+              <div class="booking-row"><span class="booking-key">Ora</span><span class="booking-val" id="bs-ora">&#8212;</span></div>
+              <div class="booking-row"><span class="booking-key">Modalita</span><span class="booking-val" id="bs-modalita">&#8212;</span></div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+        <div class="section-heading" style="margin-bottom:10px">Dettagli incontro e invito</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="field-group">
+            <label class="field-label">Durata incontro</label>
+            <select class="field-select" id="inc-durata" style="font-size:13px" onchange="updateBookingSummary()">
+              <option value="30">30 minuti</option>
+              <option value="45">45 minuti</option>
+              <option value="60" selected>60 minuti</option>
+              <option value="90">90 minuti</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Modalita</label>
+            <select class="field-select" id="inc-modalita" style="font-size:13px" onchange="updateBookingSummary(); toggleIncLinkWrap()">
+              <option value="video">Videochiamata</option>
+              <option value="presenza">In presenza</option>
+              <option value="telefono">Telefono</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group" id="inc-link-wrap">
+          <label class="field-label">Link videochiamata (opzionale)</label>
+          <input class="field-input" id="inc-link" type="url" placeholder="https://meet.google.com/xxx-yyy-zzz">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Note aggiuntive per l'invito</label>
+          <textarea class="field-input field-textarea" id="inc-note" rows="3" placeholder="Es. Porta con te eventuali domande sul report..."></textarea>
+        </div>
+
+        <hr class="divider">
+        <div class="section-heading" style="margin-bottom:10px">Anteprima email invito</div>
+        <div class="email-preview" style="margin-bottom:28px">
+          <div class="preview-bar">
+            <span>Anteprima invito</span>
+          </div>
+          <div class="preview-body" id="inc-email-preview" style="white-space:pre-line;color:var(--mid);font-style:italic">Seleziona un partecipante, una data e un orario per visualizzare l'anteprima.</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary btn-inline" id="btn-send-incontro" onclick="sendIncontro()" disabled>Invia invito incontro</button>
+          <button class="btn btn-secondary btn-inline" onclick="showConfigSub('menu')">Annulla</button>
+          <span id="inc-sent-note" style="margin-left:auto;font-size:12px;color:var(--light);display:none">&#10003; Invito inviato</span>
+        </div>
+
+        <hr class="divider">
+        <div class="section-heading" style="margin-bottom:10px">Incontri programmati</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Partecipante</th><th>Azienda</th><th>Data e ora</th><th>Modalita</th><th>Stato</th><th></th></tr></thead>
+            <tbody id="inc-scheduled-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sub: Report -->
+      <div id="config-report" style="display:none" class="fade-in">
+        <div style="margin-bottom:20px">
+          <span onclick="showConfigSub('menu')" style="font-size:12px;color:var(--light);cursor:pointer"
+            onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--light)'">← Configurazioni</span>
+        </div>
+        <div class="page-tag">Configurazioni</div>
+        <h1 class="page-title">Invio report</h1>
+        <p class="page-desc">Seleziona i Test Taker che hanno completato il test e invia loro il report PDF.</p>
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <select class="field-select" id="filter-az-rep" onchange="filterTableRep()" style="max-width:200px;font-size:13px">
+            <option value="">Tutte le aziende</option>
+            <option>Acme S.r.l.</option><option>Beta Group S.p.A.</option><option>Gamma Consulting</option>
+          </select>
+          <select class="field-select" id="filter-band-rep" onchange="filterTableRep()" style="max-width:160px;font-size:13px">
+            <option value="">Tutte le bande</option>
+            <option>Leader</option><option>Ready</option><option>Emerging</option><option>Explorer</option>
+          </select>
+          <input class="search-input" id="search-rep" placeholder="Cerca per nome…" oninput="filterTableRep()">
+        </div>
+        <div class="table-wrap">
+          <div class="select-all-row" onclick="toggleAllRep()">
+            <div class="cb-wrap" id="cb-all-rep"></div>
+            <span id="sel-all-rep-label">Seleziona tutti i completati</span>
+          </div>
+          <table>
+            <thead><tr><th style="width:36px"></th><th>Partecipante</th><th>Azienda</th><th>Readiness Band</th><th>T-score</th><th>Stato report</th></tr></thead>
+            <tbody id="rep-tbody"></tbody>
+          </table>
+          <div class="summary-strip">
+            <span>Selezionati: <strong id="rep-count">0</strong></span>
+            <span id="rep-none" style="color:var(--light);font-size:12px">Nessun partecipante selezionato</span>
+          </div>
+        </div>
+        <div class="field-group" style="max-width:420px">
+          <label class="field-label">Destinatario del report</label>
+          <select class="field-select" style="font-size:13px">
+            <option>Partecipante (via email)</option>
+            <option>Partecipante e Amministratore</option>
+            <option>Solo Amministratore</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-inline" id="btn-send-rep" onclick="sendReport()" disabled>Invia report selezionati</button>
+          <button class="btn btn-secondary btn-inline" onclick="showConfigSub('menu')">Annulla</button>
+          <span id="rep-sent-note" style="margin-left:auto;font-size:12px;color:var(--light);display:none">✓ Report inviati</span>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: NUOVA SESSIONE
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-session" style="background:var(--white);padding-top:48px">
+  <div class="layout">
+
+    <aside>
+      <div class="aside-section">
+        <div class="aside-label">Navigazione</div>
+        <div class="aside-item" onclick="goToDashboard()"><span class="aside-icon">⊞</span> Dashboard</div>
+        <div class="aside-item" onclick="goToUsers()"><span class="aside-icon">👤</span> Utenti</div>
+        <div class="aside-item" onclick="goToConfig()"><span class="aside-icon">⚙</span> Configurazioni</div>
+        <div class="aside-item active"><span class="aside-icon">📋</span> Nuova sessione</div>
+      </div>
+    </aside>
+
+    <main>
+      <div style="max-width:780px">
+        <h1 class="page-title" id="sess-step-title">Configura sessione</h1>
+        <p class="page-desc" id="sess-step-desc">Imposta i parametri della sessione prima di inviare i link ai partecipanti.</p>
+
+        <div class="step-progress" id="sess-step-progress">
+          <div class="step-node active" data-step="1" onclick="goSessStep(1)">1</div>
+          <div class="step-dash"></div>
+          <div class="step-node" data-step="2" onclick="goSessStep(2)">2</div>
+          <div class="step-dash"></div>
+          <div class="step-node" data-step="3" onclick="goSessStep(3)">3</div>
+          <div class="step-dash"></div>
+          <div class="step-node" data-step="4" onclick="goSessStep(4)">4</div>
+          <div class="step-dash"></div>
+          <div class="step-node" data-step="5" onclick="goSessStep(5)">5</div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step-panel visible" id="sess-panel-1">
+          <div class="question-block">
+            <div class="question-label">Seleziona un'azienda esistente o creane una nuova</div>
+            <div class="options" style="margin-bottom:20px">
+              <label class="option selected" onclick="toggleRadio(this,'az-mode'); document.getElementById('az-list').style.display='flex'; document.getElementById('az-new').style.display='none'">
+                <span class="option-radio-outer"><span class="option-radio-inner"></span></span>
+                <span class="option-text">Seleziona azienda esistente</span>
+              </label>
+              <label class="option" onclick="toggleRadio(this,'az-mode'); document.getElementById('az-list').style.display='none'; document.getElementById('az-new').style.display='block'">
+                <span class="option-radio-outer"><span class="option-radio-inner"></span></span>
+                <span class="option-text">Crea nuova azienda</span>
+              </label>
+            </div>
+            <div id="az-list" style="display:flex;flex-direction:column;border:1px solid var(--border);border-radius:3px;overflow:hidden;max-width:520px">
+              <div style="padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)">
+                <input style="font-family:var(--font);font-size:13px;border:none;background:transparent;outline:none;width:100%;color:var(--black)" placeholder="Cerca azienda…" oninput="filterAziende(this.value)">
+              </div>
+              <div id="az-rows"></div>
+            </div>
+            <div id="az-new" style="display:none;max-width:420px;margin-top:16px">
+              <div class="field-group"><label class="field-label">Ragione sociale</label><input class="field-input" type="text" placeholder="Es. Acme S.r.l."></div>
+              <div class="field-group"><label class="field-label">Settore</label><input class="field-input" type="text" placeholder="Es. Tecnologia…"></div>
+              <div class="field-group"><label class="field-label">Referente (email)</label><input class="field-input" type="email" placeholder="referente@azienda.it"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-panel" id="sess-panel-2">
+          <div class="question-block">
+            <div class="question-label">Aggiungi i partecipanti per <strong id="az-selected-name">—</strong></div>
+            <div style="display:flex;gap:10px;margin-bottom:16px;align-items:flex-end;flex-wrap:wrap">
+              <div><label class="field-label">Nome e cognome</label><input class="field-input" id="tt-name" type="text" placeholder="Es. Marco Bianchi" style="width:200px"></div>
+              <div><label class="field-label">Email</label><input class="field-input" id="tt-email" type="email" placeholder="m.bianchi@co.it" style="width:220px"></div>
+              <div><label class="field-label">Ruolo</label>
+                <select class="field-input" id="tt-role" style="width:160px;cursor:pointer">
+                  <option value="">— nessuno —</option>
+                  <option>AI Manager</option><option>Data Analyst</option>
+                  <option>Sviluppatore</option><option>HR Business Partner</option>
+                </select>
+              </div>
+              <button class="btn btn-primary btn-sm btn-inline" onclick="addTestTaker()">+ Aggiungi</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:3px;overflow:hidden;max-width:680px">
+              <div style="display:grid;grid-template-columns:1fr 1fr 140px 40px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border)">
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Nome</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Email</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Ruolo</span>
+                <span></span>
+              </div>
+              <div id="tt-list"></div>
+              <div id="tt-empty" style="padding:28px 16px;text-align:center;color:var(--light);font-size:13px">Nessun partecipante aggiunto</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-panel" id="sess-panel-3">
+          <div class="question-block">
+            <div class="question-label">Modalità di invio del link</div>
+            <div class="options">
+              <label class="option selected" onclick="toggleRadio(this,'inv')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">Email individuale — link monouso per partecipante (consigliato)</span></label>
+              <label class="option" onclick="toggleRadio(this,'inv')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">Link condiviso — unico URL per tutti</span></label>
+            </div>
+          </div>
+          <div class="question-block">
+            <div class="question-label">Validità del link</div>
+            <div class="options">
+              <label class="option" onclick="toggleRadio(this,'exp')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">48 ore</span></label>
+              <label class="option selected" onclick="toggleRadio(this,'exp')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">72 ore (consigliato)</span></label>
+              <label class="option" onclick="toggleRadio(this,'exp')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">7 giorni</span></label>
+            </div>
+          </div>
+          <div class="question-block">
+            <div class="question-label">Messaggio personalizzato <span style="font-weight:300;color:var(--light)">(opzionale)</span></div>
+            <textarea class="field-input" rows="4" placeholder="Es. Gentile partecipante, ti invitiamo a completare il Readiness Assessment…" style="width:100%;max-width:520px;resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-panel" id="sess-panel-4">
+          <div class="question-block">
+            <div class="question-label">Stato di avanzamento — <span id="az-name-s4" style="font-weight:400;color:var(--mid)">—</span></div>
+            <div style="display:flex;gap:24px;margin-bottom:24px">
+              <div style="text-align:center"><div style="font-size:28px;font-weight:300;color:var(--black);line-height:1" id="s4-completed">—</div><div style="font-size:11px;color:var(--light);margin-top:4px;text-transform:uppercase;letter-spacing:.07em">Completati</div></div>
+              <div style="text-align:center"><div style="font-size:28px;font-weight:300;color:var(--black);line-height:1" id="s4-pending">—</div><div style="font-size:11px;color:var(--light);margin-top:4px;text-transform:uppercase;letter-spacing:.07em">In attesa</div></div>
+              <div style="text-align:center"><div style="font-size:28px;font-weight:300;color:var(--black);line-height:1" id="s4-expired">0</div><div style="font-size:11px;color:var(--light);margin-top:4px;text-transform:uppercase;letter-spacing:.07em">Scaduti</div></div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:3px;overflow:hidden;max-width:640px">
+              <div style="display:grid;grid-template-columns:1fr 140px 120px 100px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border)">
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Partecipante</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Stato</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Avanzamento</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Azione</span>
+              </div>
+              <div id="s4-list"></div>
+              <div id="s4-empty" style="padding:28px 16px;text-align:center;color:var(--light);font-size:13px">Nessun partecipante — torna al passo 2</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-panel" id="sess-panel-5">
+          <div class="question-block">
+            <div class="question-label">A chi inviare il report PDF?</div>
+            <div class="options">
+              <label class="option selected" onclick="toggleRadio(this,'rep')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">Partecipante — riceve il proprio report via email</span></label>
+              <label class="option" onclick="toggleRadio(this,'rep')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">Partecipante e amministratore</span></label>
+              <label class="option" onclick="toggleRadio(this,'rep')"><span class="option-radio-outer"><span class="option-radio-inner"></span></span><span class="option-text">Solo amministratore</span></label>
+            </div>
+          </div>
+          <div class="question-block">
+            <div class="question-label">Test completati disponibili per il report</div>
+            <div style="border:1px solid var(--border);border-radius:3px;overflow:hidden;max-width:600px;margin-bottom:20px">
+              <div style="display:grid;grid-template-columns:32px 1fr 100px 80px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border)">
+                <span></span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Partecipante</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Readiness</span>
+                <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Report</span>
+              </div>
+              <div id="s5-list"></div>
+              <div id="s5-empty" style="padding:28px 16px;text-align:center;color:var(--light);font-size:13px">Nessun test completato disponibile</div>
+            </div>
+            <button class="btn btn-primary btn-inline" id="btn-send-report-sess" onclick="sendReportsSess()">Invia report selezionati</button>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="btn-back" id="sess-btn-back" onclick="prevSessStep()" style="display:none">Indietro</button>
+          <button class="btn-next" id="sess-btn-next" onclick="nextSessStep()">Continua</button>
+          <button class="btn-skip-link" id="sess-btn-skip" onclick="nextSessStep()">Salta</button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: TEST TAKER — Landing
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-taker">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh">
+    <div class="landing-inner fade-in">
+      <div class="landing-tag">Readiness Assessment · Pilot Mar 2026</div>
+      <h1 class="landing-title">Benvenuto,<br><strong id="taker-name">Marco Bianchi</strong></h1>
+      <p class="landing-subtitle">Sei stato invitato da <span id="company-name">Acme S.r.l.</span></p>
+      <div class="info-grid">
+        <div class="info-cell"><div class="info-cell-label">Durata stimata</div><div class="info-cell-value">20 – 25 minuti</div></div>
+        <div class="info-cell"><div class="info-cell-label">Domande</div><div class="info-cell-value">10 domande · scala 1–5</div></div>
+        <div class="info-cell"><div class="info-cell-label">Valutazione</div><div class="info-cell-value">Profilo Big Five + AI Readiness</div></div>
+        <div class="info-cell"><div class="info-cell-label">Report</div><div class="info-cell-value">Riceverai il PDF via email</div></div>
+      </div>
+      <div style="margin-bottom:28px">
+        <div class="privacy-title" style="margin-bottom:10px">Come svolgere il test</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="display:flex;gap:10px;font-size:13px;color:var(--mid);font-weight:300"><span style="color:var(--black);font-weight:500;flex-shrink:0">1.</span>Leggi ogni affermazione e indica quanto ti rispecchia, da <em>Per niente</em> a <em>Moltissimo</em>.</li>
+          <li style="display:flex;gap:10px;font-size:13px;color:var(--mid);font-weight:300"><span style="color:var(--black);font-weight:500;flex-shrink:0">2.</span>Non ci sono risposte giuste o sbagliate: rispondi in modo spontaneo.</li>
+          <li style="display:flex;gap:10px;font-size:13px;color:var(--mid);font-weight:300"><span style="color:var(--black);font-weight:500;flex-shrink:0">3.</span>Al termine riceverai un report personalizzato con il tuo profilo.</li>
+        </ul>
+      </div>
+      <div class="privacy-box">
+        <div class="privacy-title">Informativa sulla privacy (GDPR)</div>
+        <div class="privacy-text">
+          I tuoi dati personali e le risposte al test saranno trattati da <strong>Acme S.r.l.</strong> in qualità di titolare del trattamento, con il supporto tecnico di <strong>Readiness Assessment Platform</strong> in qualità di responsabile del trattamento, ai sensi del Regolamento (UE) 2016/679 (GDPR).<br><br>
+          <strong>Finalità:</strong> valutazione delle competenze professionali e del profilo di readiness per l'adozione di strumenti AI.<br><br>
+          <strong>Dati raccolti:</strong> nome, cognome, indirizzo email, ruolo professionale, risposte al questionario.<br><br>
+          <strong>Conservazione:</strong> i dati grezzi saranno conservati per 24 mesi dalla data di completamento. Il report PDF resterà disponibile per 30 giorni.
+        </div>
+        <label class="privacy-check" onclick="togglePrivacy()">
+          <span class="check-box" id="privacy-check"></span>
+          <span class="check-label">Ho letto e accetto il trattamento dei miei dati personali per le finalità indicate.</span>
+        </label>
+      </div>
+      <button class="btn-cta" id="btn-start" disabled onclick="startTest()">Inizia il test</button>
+      <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--light)">
+        Sei un amministratore?
+        <span onclick="showAdminLogin()" style="color:var(--black);font-weight:500;cursor:pointer;text-decoration:underline">Accedi al pannello →</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: TEST TAKER — Domande
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-taker-q">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh">
+    <div class="question-inner">
+      <div class="step-bar" id="step-bar"></div>
+      <div id="q-body" class="fade-in">
+        <div class="q-dimension" id="q-dimension"></div>
+        <div class="q-text" id="q-text"></div>
+        <div class="scale-wrap" id="scale-wrap"></div>
+        <div class="scale-labels"><span>Per niente</span><span>Moltissimo</span></div>
+      </div>
+      <div class="q-nav">
+        <button class="btn-nav" id="btn-prev" onclick="prevQ()">Indietro</button>
+        <button class="btn-nav primary" id="btn-next-q" onclick="nextQ()" disabled>Avanti</button>
+        <span class="q-skip" onclick="skipQ()">Salta</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: TEST TAKER — Fine test
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-taker-end">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh">
+    <div class="end-inner fade-in">
+      <div class="end-icon">✓</div>
+      <h2 class="end-title">Grazie, <span id="end-name">Marco</span>.<br>Il test è completato.</h2>
+      <p class="end-sub">Le tue risposte sono state registrate correttamente.<br>Riceverai il tuo report via email nei prossimi minuti.</p>
+      <div class="end-meta">
+        <div class="end-meta-row"><span class="end-meta-key">Partecipante</span><span class="end-meta-val" id="end-fullname">Marco Bianchi</span></div>
+        <div class="end-meta-row"><span class="end-meta-key">Azienda</span><span class="end-meta-val" id="end-company">Acme S.r.l.</span></div>
+        <div class="end-meta-row"><span class="end-meta-key">Completato il</span><span class="end-meta-val" id="end-date"></span></div>
+        <div class="end-meta-row"><span class="end-meta-key">Report</span><span class="end-meta-val">Sarà inviato secondo gli accordi definiti</span></div>
+      </div>
+      <p class="end-note">I tuoi dati sono trattati in conformità al GDPR. Puoi richiedere la cancellazione scrivendo a <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="88f8fae1fee9ebf1c8f8e4e9fceee7fae5a6e1fc">[email&#160;protected]</a></p>
+    </div>
+   <a href="Report_Assessment_Marco_Bianchi.html">Vai Al Report del risultato</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN: VISTA AZIENDALE
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-vista-aziendale" style="background:var(--bg);padding-top:48px">
+  <div class="layout">
+
+    <aside>
+      <div class="aside-section">
+        <div class="aside-label">Navigazione</div>
+        <div class="aside-item" onclick="goToDashboard()"><span class="aside-icon">⊞</span> Dashboard</div>
+        <div class="aside-item" onclick="goToUsers()"><span class="aside-icon">👤</span> Utenti</div>
+        <div class="aside-item" onclick="goToConfig()"><span class="aside-icon">⚙</span> Configurazioni</div>
+        <div class="aside-item" onclick="goToSession()"><span class="aside-icon">📋</span> Nuova sessione</div>
+        <div class="aside-item active"><span class="aside-icon">📊</span> Vista Aziendale</div>
+      </div>
+      <div class="aside-section">
+        <div class="aside-label">Anteprima</div>
+        <div class="aside-item" onclick="goToTakerView()"><span class="aside-icon">▶</span> Vista test taker</div>
+      </div>
+    </aside>
+
+    <main class="fade-in">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:12px">
+        <div>
+          <h1 class="page-title">Distribuzione Aziendale</h1>
+          <p class="page-desc">Scatter matrix Big Five × AI Readiness — un punto per dipendente</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">Azienda</label>
+          <select class="field-select" id="va-filter-azienda" onchange="renderScatter()" style="font-size:13px;min-width:180px">
+            <option value="">Tutte le aziende</option>
+            <option>Acme S.r.l.</option>
+            <option>Beta Group S.p.A.</option>
+            <option>Gamma Consulting</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Controlli asse X + legenda -->
+      <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:16px 20px;margin-bottom:16px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--light);margin-bottom:10px">Asse X — Dimensione Big Five</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px" id="va-dim-btns">
+          <button class="va-dim-btn active" onclick="setDimension('O')">O — Apertura Mentale</button>
+          <button class="va-dim-btn" onclick="setDimension('C')">C — Coscienziosità</button>
+          <button class="va-dim-btn" onclick="setDimension('E')">E — Estroversione</button>
+          <button class="va-dim-btn" onclick="setDimension('A')">A — Amicalità</button>
+          <button class="va-dim-btn" onclick="setDimension('N')">N — Stabilità Emotiva</button>
+        </div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--light);margin-bottom:8px">Colorazione punti per Band</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mid)"><span style="width:10px;height:10px;border-radius:50%;background:#111;display:inline-block"></span>Leader</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mid)"><span style="width:10px;height:10px;border-radius:50%;background:#555;display:inline-block"></span>Ready</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mid)"><span style="width:10px;height:10px;border-radius:50%;background:#2196F3;display:inline-block"></span>Emerging</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mid)"><span style="width:10px;height:10px;border-radius:50%;background:#90CAF9;display:inline-block"></span>Explorer</span>
+        </div>
+      </div>
+
+      <!-- Scatter plot canvas -->
+      <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:20px;margin-bottom:16px;position:relative">
+        <canvas id="va-scatter" style="width:100%;height:420px;display:block"></canvas>
+        <div id="va-no-data" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;color:var(--light);letter-spacing:.05em">Nessun dato disponibile</div>
+        <!-- Tooltip -->
+        <div id="va-tooltip" style="display:none;position:absolute;background:white;border:1px solid var(--border);border-radius:4px;padding:10px 14px;font-size:12px;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10;min-width:160px"></div>
+      </div>
+
+      <!-- Statistiche Aggregate -->
+      <div style="background:white;border:1px solid var(--border);border-radius:4px;overflow:hidden">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center"
+          onclick="toggleStatistiche()">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid)">Statistiche Aggregate</span>
+          <span id="va-stats-arrow" style="font-size:14px;color:var(--light);transition:transform .2s">▼</span>
+        </div>
+        <div id="va-stats-body" style="padding:20px;display:none">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:20px" id="va-stats-cards"></div>
+          <div style="border-top:1px solid var(--border);padding-top:16px">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--light);margin-bottom:12px">Distribuzione Band</div>
+            <div id="va-band-bars"></div>
+             </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
