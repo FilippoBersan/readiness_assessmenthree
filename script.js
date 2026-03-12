@@ -138,6 +138,9 @@ function showAdminLogin() {
   hideTopbars();
 }
 
+function vaiAllaPagina() {
+  window.location.href = 'Report_Assessment_Marco_Bianchi.html';
+}
 
 /* ═══════════════════════════════════════════════
    LOGIN / LOGOUT
