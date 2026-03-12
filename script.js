@@ -276,7 +276,7 @@ function deleteUser() {
    CONFIGURAZIONI
 ═══════════════════════════════════════════════ */
 function showConfigSub(sub) {
-  ['config-menu','config-email','config-inviti','config-report','config-incontri'].forEach(id => {
+  ['config-menu','config-email','config-inviti','config-report','config-incontri','config-demo'].forEach(id => {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('config-'+sub).style.display = 'block';
@@ -284,6 +284,7 @@ function showConfigSub(sub) {
   if (sub==='report')   initReport();
   if (sub==='email')    updateEmailPreview();
   if (sub==='incontri') initIncontri();
+  if (sub==='demo') initDemoConfig();
 }
 function updateEmailPreview() {
   const body = document.getElementById('email-body')?.value || '';
@@ -1212,4 +1213,140 @@ function deleteIncontro(id) {
   renderScheduledIncontri();
   renderCalendar();
   filterIncontriTakers();
+}
+
+
+/* ═══════════════════════════════════════════════
+   PERSONALIZZA DEMO TEST
+═══════════════════════════════════════════════ */
+
+// Valori di default (specchio di TAKER e QUESTIONS già esistenti)
+const DEMO_DEFAULTS = {
+  name:     'Marco Bianchi',
+  company:  'Acme S.r.l.',
+  email:    'm.bianchi@acme.it',
+  role:     'AI Manager',
+  tag:      'Readiness Assessment · Pilot Mar 2026',
+  durata:   '20 – 25 minuti',
+  ndomande: '10 domande · scala 1–5',
+  questions: [
+    { dim:'Apertura Mentale',  text:'Mi entusiasma sperimentare nuove soluzioni basate su AI nel mio lavoro.' },
+    { dim:'Apertura Mentale',  text:'Sono curioso di esplorare applicazioni AI anche al di fuori del mio ambito professionale.' },
+    { dim:'Coscienziosità',    text:'Quando integro nuovi strumenti digitali nel mio lavoro, lo faccio in modo pianificato e strutturato.' },
+    { dim:'Coscienziosità',    text:'Mi impegno a completare le attività che richiedono l\'apprendimento di nuove tecnologie.' },
+    { dim:'Estroversione',     text:'Mi piace condividere con i colleghi le esperienze d\'uso di nuovi strumenti AI.' },
+    { dim:'Estroversione',     text:'Prendo volentieri l\'iniziativa per proporre l\'adozione di soluzioni innovative nel mio team.' },
+    { dim:'Amicalità',         text:'Collaboro facilmente con altri per valutare e adottare strumenti AI nel mio contesto lavorativo.' },
+    { dim:'Amicalità',         text:'Considero il feedback dei colleghi un elemento utile per migliorare l\'uso delle tecnologie AI.' },
+    { dim:'Stabilità Emotiva', text:'Di fronte a errori o risultati inaspettati dell\'AI, mantengo la calma e cerco soluzioni.' },
+    { dim:'AI Readiness',      text:'Mi sento pronto a integrare strumenti AI nelle mie attività quotidiane con limitata supervisione esterna.' },
+  ]
+};
+
+// Stato corrente della configurazione demo (parte da una copia dei default)
+let demoConfig = JSON.parse(JSON.stringify(DEMO_DEFAULTS));
+
+// Chiamata quando si apre la sotto-pagina demo
+function initDemoConfig() {
+  document.getElementById('demo-name').value     = demoConfig.name;
+  document.getElementById('demo-company').value  = demoConfig.company;
+  document.getElementById('demo-email').value    = demoConfig.email;
+  document.getElementById('demo-role').value     = demoConfig.role;
+  document.getElementById('demo-tag').value      = demoConfig.tag;
+  document.getElementById('demo-durata').value   = demoConfig.durata;
+  document.getElementById('demo-ndomande').value = demoConfig.ndomande;
+  renderDemoQuestions();
+  renderDemoLandingPreview();
+
+  // Aggiorna anteprima in tempo reale
+  ['demo-name','demo-company','demo-tag','demo-durata','demo-ndomande'].forEach(id => {
+    document.getElementById(id).addEventListener('input', renderDemoLandingPreview);
+  });
+}
+
+function renderDemoQuestions() {
+  const container = document.getElementById('demo-questions-list');
+  container.innerHTML = demoConfig.questions.map((q, i) => `
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="min-width:130px;padding-top:10px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--light)">${q.dim}</span>
+      </div>
+      <input class="field-input" id="demo-q-${i}" type="text" value="${q.text.replace(/"/g,'&quot;')}"
+        style="flex:1;font-size:13px" oninput="renderDemoLandingPreview()">
+    </div>
+  `).join('');
+}
+
+function renderDemoLandingPreview() {
+  const name    = document.getElementById('demo-name')?.value || demoConfig.name;
+  const company = document.getElementById('demo-company')?.value || demoConfig.company;
+  const tag     = document.getElementById('demo-tag')?.value || demoConfig.tag;
+  const durata  = document.getElementById('demo-durata')?.value || demoConfig.durata;
+  const ndom    = document.getElementById('demo-ndomande')?.value || demoConfig.ndomande;
+  const first   = name.split(' ')[0];
+
+  document.getElementById('demo-landing-preview').innerHTML = `
+    <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--light);margin-bottom:6px">${tag}</div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px">Benvenuto, ${first}</div>
+    <div style="font-size:13px;color:var(--mid);margin-bottom:12px">Sei stato invitato da <strong>${company}</strong></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:400px;margin-bottom:12px">
+      <div style="border:1px solid var(--border);border-radius:3px;padding:8px 12px">
+        <div style="font-size:10px;color:var(--light);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Durata stimata</div>
+        <div style="font-size:13px;font-weight:500;margin-top:2px">${durata}</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:3px;padding:8px 12px">
+        <div style="font-size:10px;color:var(--light);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Domande</div>
+        <div style="font-size:13px;font-weight:500;margin-top:2px">${ndom}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--mid)">… (privacy, bottone Inizia il test)</div>
+  `;
+}
+
+function saveDemoConfig() {
+  // Legge i campi e aggiorna demoConfig
+  demoConfig.name     = document.getElementById('demo-name').value.trim() || demoConfig.name;
+  demoConfig.company  = document.getElementById('demo-company').value.trim() || demoConfig.company;
+  demoConfig.email    = document.getElementById('demo-email').value.trim() || demoConfig.email;
+  demoConfig.role     = document.getElementById('demo-role').value.trim() || demoConfig.role;
+  demoConfig.tag      = document.getElementById('demo-tag').value.trim() || demoConfig.tag;
+  demoConfig.durata   = document.getElementById('demo-durata').value.trim() || demoConfig.durata;
+  demoConfig.ndomande = document.getElementById('demo-ndomande').value.trim() || demoConfig.ndomande;
+
+  demoConfig.questions = demoConfig.questions.map((q, i) => ({
+    dim:  q.dim,
+    text: document.getElementById('demo-q-'+i)?.value.trim() || q.text
+  }));
+
+  // Applica alla demo live
+  TAKER.name    = demoConfig.name;
+  TAKER.first   = demoConfig.name.split(' ')[0];
+  TAKER.company = demoConfig.company;
+  TAKER.email   = demoConfig.email;
+
+  // Aggiorna le domande usate dal test
+  demoConfig.questions.forEach((q, i) => { if (QUESTIONS[i]) QUESTIONS[i].text = q.text; });
+
+  // Aggiorna i campi visibili nella landing taker
+  const tn = document.getElementById('taker-name');
+  const cn = document.getElementById('company-name');
+  const tt = document.getElementById('topbar-company-tt');
+  const lt = document.getElementById('demo-tag') ; // solo per leggere
+  if (tn) tn.textContent = demoConfig.name;
+  if (cn) cn.textContent = demoConfig.company;
+  if (tt) tt.textContent = demoConfig.company;
+
+  // Aggiorna la landing tag se esiste come testo fisso
+  document.querySelectorAll('.landing-tag').forEach(el => el.textContent = demoConfig.tag);
+
+  const note = document.getElementById('demo-saved-note');
+  note.style.display = 'inline';
+  showToast('Configurazione demo applicata');
+  setTimeout(() => { note.style.display = 'none'; }, 3500);
+}
+
+function resetDemoConfig() {
+  demoConfig = JSON.parse(JSON.stringify(DEMO_DEFAULTS));
+  initDemoConfig();
+  showToast('Configurazione ripristinata ai valori predefiniti');
 }

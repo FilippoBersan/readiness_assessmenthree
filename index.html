@@ -295,7 +295,17 @@
             <div class="config-card-icon">↓</div>
             <div class="config-card-body">
               <div class="config-card-title">Invio report</div>
+              
               <div class="config-card-desc">Invia il report PDF ai partecipanti che hanno completato il test</div>
+            </div>
+            
+            <span class="config-card-arrow">›</span>
+          </div>
+                    <div class="config-card" onclick="showConfigSub('demo')">
+            <div class="config-card-icon">▶</div>
+            <div class="config-card-body">
+              <div class="config-card-title">Personalizza Demo Test</div>
+              <div class="config-card-desc">Modifica nome, azienda, testo di benvenuto e domande della demo</div>
             </div>
             <span class="config-card-arrow">›</span>
           </div>
@@ -517,6 +527,72 @@ Il team di {{azienda}}</textarea>
             <thead><tr><th>Partecipante</th><th>Azienda</th><th>Data e ora</th><th>Modalita</th><th>Stato</th><th></th></tr></thead>
             <tbody id="inc-scheduled-tbody"></tbody>
           </table>
+        </div>
+      </div>
+
+
+      <!-- Sub: Demo -->
+      <div id="config-demo" style="display:none" class="fade-in">
+        <div style="margin-bottom:20px">
+          <span onclick="showConfigSub('menu')" style="font-size:12px;color:var(--light);cursor:pointer"
+            onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--light)'">← Configurazioni</span>
+        </div>
+        <div class="page-tag">Configurazioni</div>
+        <h1 class="page-title">Personalizza Demo Test</h1>
+        <p class="page-desc">Modifica i dati visualizzati nella demo di esecuzione del test.</p>
+
+        <div class="section-heading">Dati partecipante demo</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:560px;margin-bottom:24px">
+          <div class="field-group">
+            <label class="field-label">Nome e cognome</label>
+            <input class="field-input" id="demo-name" type="text" placeholder="Es. Marco Bianchi" value="Marco Bianchi">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Azienda</label>
+            <input class="field-input" id="demo-company" type="text" placeholder="Es. Acme S.r.l." value="Acme S.r.l.">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Email</label>
+            <input class="field-input" id="demo-email" type="email" placeholder="email@azienda.it" value="m.bianchi@acme.it">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Ruolo</label>
+            <input class="field-input" id="demo-role" type="text" placeholder="Es. AI Manager" value="AI Manager">
+          </div>
+        </div>
+
+        <hr class="divider">
+        <div class="section-heading">Testo di benvenuto</div>
+        <div class="field-group" style="max-width:620px">
+          <label class="field-label">Tag sopra il titolo</label>
+          <input class="field-input" id="demo-tag" type="text" value="Readiness Assessment · Pilot Mar 2026">
+        </div>
+        <div class="field-group" style="max-width:620px">
+          <label class="field-label">Durata stimata</label>
+          <input class="field-input" id="demo-durata" type="text" value="20 – 25 minuti">
+        </div>
+        <div class="field-group" style="max-width:620px">
+          <label class="field-label">Numero domande (testo descrittivo)</label>
+          <input class="field-input" id="demo-ndomande" type="text" value="10 domande · scala 1–5">
+        </div>
+
+        <hr class="divider">
+        <div class="section-heading">Domande del test</div>
+        <p style="font-size:13px;color:var(--mid);margin-bottom:16px">Modifica il testo di ciascuna domanda. La dimensione (Big Five / AI Readiness) rimane invariata.</p>
+        <div id="demo-questions-list" style="max-width:680px;display:flex;flex-direction:column;gap:10px;margin-bottom:24px"></div>
+
+        <hr class="divider">
+        <div class="section-heading" style="margin-bottom:10px">Anteprima landing demo</div>
+        <div class="email-preview" style="margin-bottom:28px">
+          <div class="preview-bar"><span>Anteprima — come apparirà la landing</span></div>
+          <div class="preview-body" id="demo-landing-preview"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary btn-inline" onclick="saveDemoConfig()">Salva e applica</button>
+          <button class="btn btn-secondary btn-inline" onclick="resetDemoConfig()">Ripristina predefiniti</button>
+          <button class="btn btn-secondary btn-inline" onclick="showConfigSub('menu')">Annulla</button>
+          <span id="demo-saved-note" style="margin-left:auto;font-size:12px;color:var(--light);display:none">✓ Configurazione applicata</span>
         </div>
       </div>
 
